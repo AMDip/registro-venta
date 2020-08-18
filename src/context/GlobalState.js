@@ -22,19 +22,19 @@ const initialState = {
    }],
    clientes: [{
     id: 1, 
-    nombre: "Naruto", 
-    apellido: "Naruto",
+    nombre: "Franz", 
+    apellido: "Liszt",
     dni: "35196000",
-    fechaNacimiento: "01-01-1989",
+    fechaNacimiento: "22-10-1811",
     edad: "31",
     tarjetaCredito: "1111222233334444"
    }],
    empleados: [{
     id: 1, 
-    nombre: "Sasuke", 
-    apellido: "Uchiha",
+    nombre: "Frederic", 
+    apellido: "Chopin",
     dni: "35196000",
-    fechaNacimiento: "01-01-1989",
+    fechaNacimiento: "17-10-1849",
     edad: "31",
     idEmpleado: "0000041",
     legajo: "0000041"
