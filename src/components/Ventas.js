@@ -101,7 +101,6 @@ export const Ventas = () => {
         (empleado) => empleado.nombre === options.label
       );
       setVendedor(vendedor);
-      console.log(vendedor);
     }
   }
 
@@ -111,35 +110,24 @@ export const Ventas = () => {
         (cliente) => cliente.nombre === options.label
       );
       setCliente(cliente);
-      console.log(cliente);
     }
   }
 
   function calcularTotalVenta() {
     let aux = 0;
-    console.log(listaProd);
     for (let i = 0; i < listaProd.length; i++) {
       aux += listaProd[i].precioUnitario * listaProd[i].cantidad;
-      console.log("calcular");
-      console.log(aux);
     }
-    console.log(aux);
     return aux;
   }
 
   function onChangeCantidad(id, value) {
     let aux = listaProd.slice();
-    console.log(id);
-    console.log(value);
     for (let i = 0; i < aux.length; i++) {
       if (aux[i].id === id) {
         aux[i].cantidad = value;
       }
-      console.log(aux);
-      console.log(aux[i].id);
-      console.log(aux[i].cantidad);
     }
-    console.log(aux);
     setListaProd(aux);
   }
 
@@ -148,24 +136,8 @@ export const Ventas = () => {
     if (!mounted.current) {
       // do componentDidMount logic
       mounted.current = true;
-    } else {
-      console.log(listaProd);
     }
   });
-
-  let headerPrint = () => {
-    return (
-      <div>
-        <h3>
-          Empleado: {vendedor.nombre} {vendedor.apellido} Legajo:{" "}
-          {vendedor.legajo}
-          Cliente: {cliente.nombre} {cliente.apellido}
-          Total Venta: {calcularTotalVenta()}
-          Detalle Venta
-        </h3>
-      </div>
-    );
-  };
 
   return (
     <div>
