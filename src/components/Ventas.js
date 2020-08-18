@@ -1,19 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Select from "react-select";
 import { Button, Container, Modal, ModalBody, ModalFooter, ModalHeader, 
-         Card, Collapse, CardText, CardBody, CardTitle, CardSubtitle } from "reactstrap";
+         Card, CardText, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 import { GlobalContext } from "../context/GlobalState";
 import NumericInput from 'react-numeric-input';
 
 export const Ventas = () => {
   const { productos, clientes, empleados } = useContext(GlobalContext);
 
-  const [cantidad, setCantidad] = useState(1);
-  const [data, setData] = useState(productos);
+  const [cantidades, setCantidades] = useState();
+  
   const [modalCliente, setModalCliente] = useState(false);
-  const [cardCliente, setCardCliente] = useState(false);
   const [modalVendedor, setModalVendedor] = useState(false);
-  const [cardVendedor, setCardVendedor] = useState(false);
   const [modalProductos, setModalProductos] = useState(false);
 
   const [listaProd, setListaProd] = useState();
@@ -27,8 +25,9 @@ export const Ventas = () => {
   clientes.map( (cliente) => listaClientes.push( {value: cliente.id, label:cliente.nombre}) );
   empleados.map( (empleado) => listaEmpleados.push( {value: empleado.id, label:empleado.nombre}) );
   productos.map( (prod) => listaDeProductos.push( {value: prod.id, label:prod.nombre}) );
+  for(var i = 0, value = 1, size = 100, cantidad = new Array(100); i < size; i++) cantidad[i] = value;
 
-  function mostrarModalCliente(dato) {
+  function mostrarModalCliente() {
     setModalCliente(true);
   }
   function cerrarModalCliente() {
@@ -53,7 +52,7 @@ export const Ventas = () => {
     );
     if (opcion === true) {
       var contador = 0;
-      var arreglo = listaProd;
+      var arreglo = [...listaProd];
       arreglo.map((registro) => {
         if (prod.id === registro.id) {
           arreglo.splice(contador, 1);
@@ -61,7 +60,6 @@ export const Ventas = () => {
         contador++;
       });
       setListaProd(arreglo);
-      setModalCliente(false);
     }
   }
 
@@ -82,6 +80,7 @@ export const Ventas = () => {
       console.log(vendedor);
     }
   }
+
   function handleSelectCliente(options) {
     if (typeof options !== 'undefined' && options != null){
       const cliente= clientes.find( cliente => cliente.nombre === options.label) ;
@@ -90,12 +89,48 @@ export const Ventas = () => {
     }
   }
 
+  function calcularTotalVenta() {
+    let aux=0
+    console.log(listaProd);
+    for(let i=0; i < listaProd.length; i++ ){
+      aux += listaProd[i].precioUnitario * listaProd[i].cantidad
+      console.log("calcular")
+      console.log(aux);
+    }
+    console.log(aux);
+    return aux;
+  }
+
+  function onChangeCantidad (id,value){
+    let aux= listaProd.slice();
+    console.log(id);
+    console.log(value);
+    for(let i=0; i< aux.length; i++){
+      if(aux[i].id === id){ aux[i].cantidad = value }
+      console.log(aux);
+      console.log(aux[i].id);
+      console.log(aux[i].cantidad);
+    }
+    console.log(aux);
+    setListaProd(aux);
+  }
+
+  const mounted = useRef();
+  useEffect(() => {
+    if (!mounted.current) {
+      // do componentDidMount logic
+      mounted.current = true;
+    } else {
+      console.log(listaProd)
+    }
+  });
+
   return (
     <div>
       <div className="ventas-container">
         <Container>
-        <Button color="info" onClick={mostrarModalVendedor} >Elegir/Cambiar Vendedor</Button> <span/>
-        <Button color="info" onClick={mostrarModalCliente} >Elegir/Cambiar Cliente</Button> <span/>
+        <Button color="info" onClick={() => mostrarModalVendedor()} >Elegir/Cambiar Vendedor</Button> <span/>
+        <Button color="info" onClick={() => mostrarModalCliente()} >Elegir/Cambiar Cliente</Button> <span/>
           <div className="container-datos-venta">
             <div className="" style={{ display: "flex", margin: "5px"}}>
                 {typeof vendedor !== 'undefined' && vendedor != null
@@ -123,20 +158,30 @@ export const Ventas = () => {
           <div className="container-venta">
             <h2>Lista Productos</h2>
             <ul className="list">
-                {typeof listaProd !== 'undefined' && listaProd != null
-                ? listaProd.map(prod => (
-                  <li key={prod.id}>
-                    <span>cantidad: <NumericInput onChange={value => setCantidad(value)} style={{ input: {height: '30px',width: '50px'} }} min={1} max={100} value={cantidad} /></span>
+                {typeof listaProd !== 'undefined' && listaProd != null && listaProd.length > 0
+                ? listaProd.map((prod, i) => ( 
+                  <li key={i.toString()}>
+                    <span>cantidad: <NumericInput key={i}
+                                      onChange={ (value) => onChangeCantidad(prod.id,value)} 
+                                      style={{ input: {height: '30px',width: '50px'} }} 
+                                      min={1} max={100} value={prod.cantidad}>
+                                    </NumericInput>
+                    </span>
                     <span>Producto: {prod.nombre}</span>
                     <span>Marca: {prod.marca}</span>
                     <span>Precio Unitario: {prod.precioUnitario}</span>
-                    <span>Total: {prod.precioUnitario * cantidad}</span>
+                <span>Total: {prod.precioUnitario * prod.cantidad}</span>
                   <Button color="danger" onClick={() => eliminar(prod)} className="delete-btn">x</Button>
                   </li>))
                 : null}
+                <div>
+                {typeof listaProd !== 'undefined' && listaProd != null && listaProd.length > 0
+                ? <span style={{float: "right", fontSize: "25px"}}>Total Venta: {calcularTotalVenta()}</span> 
+                : null}
+                </div>
             </ul>
           </div>
-          <Button color="success" onClick={mostrarModalProductos}>Agregar Producto</Button> <span/>
+          <Button color="success" onClick={() => mostrarModalProductos()}>Agregar Producto</Button> <span/>
           <Button color="success">Imprimir Factura</Button> <span/>
           <br />
         </Container>

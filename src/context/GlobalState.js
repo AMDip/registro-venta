@@ -9,14 +9,16 @@ const initialState = {
     marca: "Coca Cola",
     fechaVencimiento: "01-01-1989",
     precioUnitario: 55.5,
-    proveedor: "10001"
+    proveedor: "10001",
+    cantidad: 1
    },{
     id: 2, 
     nombre: "Seven Up", 
     marca: "Pepsi",
     fechaVencimiento: "01-01-1989",
     precioUnitario: 60,
-    proveedor: "10001"
+    proveedor: "10002",
+    cantidad: 1
    }],
    clientes: [{
     id: 1, 

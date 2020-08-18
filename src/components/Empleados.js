@@ -69,7 +69,7 @@ export const Empleados = () => {
     var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+dato.id);
     if (opcion === true) {
       var contador = 0;
-      var arreglo = data;
+      var arreglo = [...data];
       arreglo.map((registro) => {
         if (dato.id === registro.id) {
           arreglo.splice(contador, 1);
@@ -113,9 +113,9 @@ export const Empleados = () => {
                 <th>Legajo</th>
               </tr>
             </thead>
-
             <tbody>
-              {data.map((dato) => (
+              {typeof data !== 'undefined' && data != null
+              ? data.map((dato) => (
                 <tr key={dato.id}>
                   <td>{dato.id}</td>
                   <td>{dato.nombre}</td>
@@ -130,7 +130,8 @@ export const Empleados = () => {
                     <Button color="danger" onClick={()=> eliminar(dato)}>Eliminar</Button>
                   </td>
                 </tr>
-              ))}
+              ))
+            : null}
             </tbody>
           </Table>
         </Container>

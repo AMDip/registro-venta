@@ -1,7 +1,6 @@
 import React from "react";
 import './App.css';
 import {Link} from 'react-router-dom';
-import {Navbar,NavItem, NavLink} from 'react-bootstrap'
 
 export default class Nav extends React.Component {
     render(){

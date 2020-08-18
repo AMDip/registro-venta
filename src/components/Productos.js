@@ -62,10 +62,10 @@ export const Productos = () => {
     };
     
     function eliminar(dato) {
-    var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+dato.id);
+    var opcion = window.confirm("Estás Seguro que deseas Eliminar el producto "+dato.nombre);
     if (opcion === true) {
       var contador = 0;
-      var arreglo = data;
+      var arreglo = [...data];
       arreglo.map((registro) => {
         if (dato.id === registro.id) {
           arreglo.splice(contador, 1);

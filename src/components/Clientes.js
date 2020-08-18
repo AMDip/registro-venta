@@ -95,7 +95,7 @@ export const Clientes = () => {
       <div>
         <Container>
         <br />
-          <Button color="success" onClick={()=>mostrarModalInsertar()}>Crear</Button>
+          <Button color="success" onClick={() => mostrarModalInsertar()}>Crear</Button>
           <br />
           <br />
           <Table>
@@ -112,7 +112,8 @@ export const Clientes = () => {
             </thead>
 
             <tbody>
-              {data.map((dato) => (
+            {typeof data !== 'undefined' && data != null
+              ? data.map((dato) => (
                 <tr key={dato.id}>
                   <td>{dato.id}</td>
                   <td>{dato.nombre}</td>
@@ -122,11 +123,12 @@ export const Clientes = () => {
                   <td>{dato.edad}</td>
                   <td>{dato.tarjetaCredito}</td>
                   <td>
-                    <Button color="primary" onClick={() => mostrarModalActualizar(dato)}>Editar</Button>{" "}
+                    <Button color="primary" onClick={()=> mostrarModalActualizar(dato)}>Editar</Button>{" "}
                     <Button color="danger" onClick={()=> eliminar(dato)}>Eliminar</Button>
                   </td>
                 </tr>
-              ))}
+              ))
+            : null }
             </tbody>
           </Table>
         </Container>
@@ -215,13 +217,13 @@ export const Clientes = () => {
           <ModalFooter>
             <Button
               color="primary"
-              onClick={() => this.editar(this.state.form)}
+              onClick={() => editar(form)}
             >
               Editar
             </Button>
             <Button
               color="danger"
-              onClick={() => this.cerrarModalActualizar()}
+              onClick={() => cerrarModalActualizar()}
             >
               Cancelar
             </Button>
@@ -302,13 +304,13 @@ export const Clientes = () => {
           <ModalFooter>
             <Button
               color="primary"
-              onClick={() => this.insertar()}
+              onClick={() => insertar()}
             >
               Agregar
             </Button>
             <Button
               className="btn btn-danger"
-              onClick={() => this.cerrarModalInsertar()}
+              onClick={() => cerrarModalInsertar()}
             >
               Cancelar
             </Button>
